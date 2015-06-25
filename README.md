@@ -9,15 +9,11 @@ Create the following alias in your .bashrc:
 That should be it.
 
 # Usage
-`$ td` will list the tasks in the list in your working directory if it finds a td file, and if not, it will create such a file. 
-`
--c ID      completes a task, moving it to the completed list
-
--f         lists completed tasks for the current directory
-
--e ID TASK edits the task with ID to be TASK
-
--w         wipes the history of completed tasks in the current directory
+`$ td` will list the tasks in the list in your working directory if it finds a td file, and if not, it will create such a file.  
+-c ID      completes a task, moving it to the completed list  
+-f         lists completed tasks for the current directory  
+-e ID TASK edits the task with ID to be TASK  
+-w         wipes the history of completed tasks in the current directory  
 `
 
 The lists are stored as `.td.txt`.

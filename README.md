@@ -6,3 +6,5 @@ Less elegant, less functional, and all around stupider version of
 Create the following alias in your .bashrc:
 
 `alias td="python path/to/td.py --dir '.'"`
+
+The lists are stored as `.td.txt`.

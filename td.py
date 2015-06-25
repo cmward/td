@@ -23,7 +23,7 @@ class Tasks(object):
         self.tasks = {}
         self.completed_tasks = {}
         self.dir = os.path.abspath(dir)
-        self.file = os.path.join(self.dir, "td.txt")
+        self.file = os.path.join(self.dir, ".td.txt")
         try:
             with open(self.file, 'r') as f:
                 i, j = 0, 0
@@ -39,7 +39,7 @@ class Tasks(object):
                                              clean_line[20:])
                             i += 1
         except IOError:
-            print "Couldn't find td.txt. Creating it in %s." \
+            print "Couldn't find .td.txt. \n Creating it in %s." \
                     % os.path.abspath(dir)
             self.write()
 

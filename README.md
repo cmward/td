@@ -18,13 +18,14 @@ That should be it.
 
 Example usage:  
 ```
-$ td Watch 7 seasons of House, M.D.  
-$ td  
-0 Watch 7 seasons of House, M.D.  
-$ td Go to the store.  
-$ td -c 0  
-$ td  
-0 Go to the store.
+$ td Watch 7 seasons of House, M.D.
+Couldn't find .td.p. One will be created in /Users/chris/code/td.
+$ td
+0 >> [2015-08-13 14:33:19] Watch 7 seasons of House, M.D.
+$ td Tighten up those graphics on level 3 -u paul
+$ td
+0 >> [2015-08-13 14:33:19] Watch 7 seasons of House, M.D.
+1 >> [2015-08-13 14:34:00] Tighten up those graphics on level 3 (paul)
 ```
 
-The lists are stored as `td.txt`.
+The lists are stored as `.td.p`.

@@ -13,26 +13,6 @@ def _parse_time():
     """Return the current time, nicely formatted."""
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-def _parse_task_from_file(line):
-    """Read task from td.txt file and create the corresponding
-    task object.
-    """
-    timestamp = line[1:20]
-    line = line[22:]
-    completed = False
-    if line.endswith("*done*"):
-        completed = True
-        line = line[:line.find("*done*")-1]
-    if line.find("*un*") != -1:
-        # +5 skips over '*un* '
-        username = line[line.find("*un*")+5:]
-        line = line[:line.find("*un*")]
-    else:
-        username = None
-    text = line
-    task = Task(text, timestamp, username, completed)
-    return task
-
 class Task(object):
     """Structure representing a single task. Stores the task string,
     the time it was created, the username of its creator (if it has one),

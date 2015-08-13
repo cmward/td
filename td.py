@@ -7,6 +7,7 @@ Create independent todo lists for individual directories.
 import argparse
 import os
 import time
+import pickle
 
 def _parse_time():
     """Return the current time, nicely formatted."""
@@ -16,7 +17,7 @@ def _parse_task_from_file(line):
     """Read task from td.txt file and create the corresponding
     task object.
     """
-    time = line[1:20]
+    timestamp = line[1:20]
     line = line[22:]
     completed = False
     if line.endswith("*done*"):
@@ -29,7 +30,7 @@ def _parse_task_from_file(line):
     else:
         username = None
     text = line
-    task = Task(text, time, username, completed)
+    task = Task(text, timestamp, username, completed)
     return task
 
 class Task(object):
@@ -37,21 +38,21 @@ class Task(object):
     the time it was created, the username of its creator (if it has one),
     and a flag indicating whether or not it's completed.
     """
-    def __init__(self, text, time, username=None, completed=False):
+    def __init__(self, text, timestamp, username=None, completed=False):
         """Each task object will have to have all of these parameters
         supplied at time of creation.
         """
         self.text = text
-        self.time = time
+        self.timestamp = timestamp
         self.username = username
         self.completed = completed
 
     def __str__(self):
         if self.username:
-            return "[" + self.time + "]" + " " + self.text + " " + \
+            return "[" + self.timestamp + "]" + " " + self.text + " " + \
                     "(" + self.username + ")"
         else:
-            return "[" + self.time + "]" + " " + self.text
+            return "[" + self.timestamp + "]" + " " + self.text
 
 class TaskDict(object):
     """Maps ids to tasks. Ids are created for each item in the list
@@ -64,24 +65,15 @@ class TaskDict(object):
         self.tasks = {}
         self.completed_tasks = {}
         self.directory = os.path.abspath(directory)
-        self.file = os.path.join(self.directory, "td.txt")
+        self.file = os.path.join(self.directory, ".td.p")
         try:
-            with open(self.file, 'r') as task_file:
-                i, j = 0, 0
-                for line in task_file:
-                    clean_line = line.strip()
-                    if clean_line != "":
-                        task = _parse_task_from_file(clean_line)
-                        if task.completed:
-                            self.completed_tasks[i] = task
-                            i += 1
-                        else:
-                            self.tasks[j] = task
-                            j += 1
+            with open(self.file) as pfile:
+                td_obj = pickle.load(pfile)
+                self.tasks = td_obj.tasks
+                self.completed_tasks = td_obj.completed_tasks
         except IOError:
-            print "Couldn't find td.txt. Creating it in %s." \
+            print "Couldn't find .td.p. One will be created in %s." \
                     % os.path.abspath(directory)
-            self.write()
 
     def _next_id(self, dict_name):
         """Return the next available id."""
@@ -108,7 +100,7 @@ class TaskDict(object):
         text = task.text + " *done*"
         username = task.username
         self.completed_tasks[self._next_id('completed_tasks')] = \
-                Task(text, _parse_time(), username, completed=True) 
+                Task(text, _parse_time(), username, completed=True)
         del self.tasks[task_id]
         self._update_ids(task_id, 'tasks')
 
@@ -130,18 +122,14 @@ class TaskDict(object):
             print "No tasks in this list."
         else:
             for task_id, task in task_dict.iteritems():
-                print task_id, ">>", task 
+                print task_id, ">>", task
 
-    def write(self):
-        """Write the tasks and completed tasks out to a .txt file.
-        Overwrites the existing file.
-        """
-        with open(self.file, 'w') as out:
-            for task in self.tasks.values():
-                out.write(str(task) + '\n')
-            out.write('\n')
-            for completed in self.completed_tasks.values():
-                out.write(str(completed) + " " + "*done*" + '\n')
+def write_dict(task_dict):
+    """Write the tasks and completed tasks out to a .txt file.
+    Overwrites the existing file.
+    """
+    with open(task_dict.file, 'w') as pfile:
+        pickle.dump(task_dict, pfile)
 
 def _main():
     """Parse arguments and perform the proper actions."""
@@ -167,16 +155,16 @@ def _main():
     task = ' '.join(args.text)
     if args.complete:
         tasks.complete_task(int(args.complete))
-        tasks.write()
+        write_dict(tasks)
     elif args.edit and args.text:
         tasks.edit_task(task, int(args.edit))
-        tasks.write()
+        write_dict(tasks)
     elif args.wipe:
         print "Wipe completed task history? (y/n)"
         user_input = raw_input()
         if user_input == "y":
             tasks.wipe_completed_history()
-            tasks.write()
+            write_dict(tasks)
         elif input == "n":
             quit()
         else:
@@ -186,7 +174,7 @@ def _main():
             tasks.add_task(task, username=args.username)
         else:
             tasks.add_task(task)
-        tasks.write()
+        write_dict(tasks)
     elif args.finished:
         tasks.print_dict("completed_tasks")
     else:

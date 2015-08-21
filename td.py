@@ -4,10 +4,7 @@ Steve Losh's t (http://stevelosh.com/projects/t/).
 
 Create independent todo lists for individual directories.
 """
-import argparse
-import os
-import time
-import pickle
+import argparse, os, time, pickle
 
 def _parse_time():
     """Return the current time, nicely formatted."""

@@ -87,7 +87,7 @@ class TaskDict(object):
 
     def wipe_completed_history(self):
         """Wipe the completed tasks dictionary. Won't take effect in the
-        .txt file until write() is called.
+        .p file until write() is called.
         """
         self.completed_tasks = {}
         print "Completed task history wiped."
@@ -102,7 +102,7 @@ class TaskDict(object):
                 print task_id, ">>", task
 
 def write_dict(task_dict):
-    """Write the tasks and completed tasks out to a .txt file.
+    """Dump the tasks and completed tasks dictionaries.
     Overwrites the existing file.
     """
     with open(task_dict.file, 'w') as pfile:

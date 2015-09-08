@@ -4,11 +4,14 @@ Steve Losh's t (http://stevelosh.com/projects/t/).
 
 Create independent todo lists for individual directories.
 """
-import argparse, os, time, pickle
+import argparse
+import os
+import pickle
+from time import strftime, localtime
 
 def _parse_time():
     """Return the current time, nicely formatted."""
-    return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    return strftime("%Y-%m-%d %H:%M:%S", localtime())
 
 class Task(object):
     """Structure representing a single task. Stores the task string,

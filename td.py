@@ -30,7 +30,7 @@ class Task(object):
     def __str__(self):
         if self.username:
             return "[" + self.timestamp + "]" + " " + self.text + " " + \
-                    "(" + self.username + ")"
+                   "(" + self.username + ")"
         else:
             return "[" + self.timestamp + "]" + " " + self.text
 
@@ -52,8 +52,8 @@ class TaskDict(object):
                 self.tasks = td_obj.tasks
                 self.completed_tasks = td_obj.completed_tasks
         except IOError:
-            print "Couldn't find .td.p. One will be created in %s." \
-                    % os.path.abspath(directory)
+            print "Couldn't find .td.p. One will be created in %s." % \
+                  os.path.abspath(directory)
 
     def _next_id(self, dict_name):
         """Return the next available id."""
@@ -80,7 +80,7 @@ class TaskDict(object):
         text = task.text + " *done*"
         username = task.username
         self.completed_tasks[self._next_id('completed_tasks')] = \
-                Task(text, _parse_time(), username, completed=True)
+            Task(text, _parse_time(), username, completed=True)
         del self.tasks[task_id]
         self._update_ids(task_id, 'tasks')
 
